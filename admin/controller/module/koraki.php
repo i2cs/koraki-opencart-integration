@@ -1,25 +1,25 @@
 <?php
-class ControllerModuleHelloworld extends Controller {
+class ControllerModuleKoraki extends Controller {
     private $error = array(); // This is used to set the errors, if any.
  
     public function index() {
-        // Loading the language file of helloworld
-        $this->load->language('module/helloworld'); 
+        // Loading the language file of koraki
+        $this->load->language('module/koraki');
      
         // Set the title of the page to the heading title in the Language file i.e., Hello World
         $this->document->setTitle($this->language->get('heading_title'));
      
         // Load the Setting Model  (All of the OpenCart Module & General Settings are saved using this Model )
         $this->load->model('setting/setting');
-     
+
         // Start If: Validates and check if data is coming by save (POST) method
         if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
             // Parse all the coming data to Setting Model to save it in database.
-            $this->model_setting_setting->editSetting('helloworld', $this->request->post);
+            $this->model_setting_setting->editSetting('koraki', $this->request->post);
      
             // To display the success text on data save
             $this->session->data['success'] = $this->language->get('text_success');
-     
+
             // Redirect to the Module Listing
             $this->response->redirect($this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL'));
         }
@@ -34,8 +34,11 @@ class ControllerModuleHelloworld extends Controller {
         $data['text_content_bottom'] = $this->language->get('text_content_bottom');      
         $data['text_column_left'] = $this->language->get('text_column_left');
         $data['text_column_right'] = $this->language->get('text_column_right');
-     
-        $data['entry_code'] = $this->language->get('entry_code');
+
+        $data['entry_client_id'] = $this->language->get('entry_client_id');
+        $data['entry_client_secret'] = $this->language->get('entry_client_secret');
+        $data['entry_client_id_placeholder'] = $this->language->get('entry_client_id_placeholder');
+        $data['entry_client_secret_placeholder'] = $this->language->get('entry_client_secret_placeholder');
         $data['entry_layout'] = $this->language->get('entry_layout');
         $data['entry_position'] = $this->language->get('entry_position');
         $data['entry_status'] = $this->language->get('entry_status');
@@ -74,51 +77,68 @@ class ControllerModuleHelloworld extends Controller {
         );
         $data['breadcrumbs'][] = array(
             'text'      => $this->language->get('heading_title'),
-            'href'      => $this->url->link('module/helloworld', 'token=' . $this->session->data['token'], 'SSL'),
+            'href'      => $this->url->link('module/koraki', 'token=' . $this->session->data['token'], 'SSL'),
             'separator' => ' :: '
         );
           
-        $data['action'] = $this->url->link('module/helloworld', 'token=' . $this->session->data['token'], 'SSL'); // URL to be directed when the save button is pressed
+        $data['action'] = $this->url->link('module/koraki', 'token=' . $this->session->data['token'], 'SSL'); // URL to be directed when the save button is pressed
      
         $data['cancel'] = $this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL'); // URL to be redirected when cancel button is pressed
-              
-        // This block checks, if the hello world text field is set it parses it to view otherwise get the default 
-        // hello world text field from the database and parse it
-        if (isset($this->request->post['helloworld_text_field'])) {
-            $data['helloworld_text_field'] = $this->request->post['helloworld_text_field'];
+
+        if (isset($this->request->post['koraki_client_id'])) {
+            $data['koraki_client_id'] = $this->request->post['koraki_client_id'];
         } else {
-            $data['helloworld_text_field'] = $this->config->get('helloworld_text_field');
-        }   
-          
+            $data['koraki_client_id'] = $this->config->get('koraki_client_id');
+        }
+
+        if (isset($this->request->post['koraki_client_secret'])) {
+            $data['koraki_client_secret'] = $this->request->post['koraki_client_secret'];
+        } else {
+            $data['koraki_client_secret'] = $this->config->get('koraki_client_secret');
+        }
+
         // This block parses the status (enabled / disabled)
-        if (isset($this->request->post['helloworld_status'])) {
-            $data['helloworld_status'] = $this->request->post['helloworld_status'];
+        if (isset($this->request->post['koraki_status'])) {
+            $data['koraki_status'] = $this->request->post['koraki_status'];
         } else {
-            $data['helloworld_status'] = $this->config->get('helloworld_status');
+            $data['koraki_status'] = $this->config->get('koraki_status');
         }
         
         $data['header'] = $this->load->controller('common/header');
         $data['column_left'] = $this->load->controller('common/column_left');
         $data['footer'] = $this->load->controller('common/footer');
 
-        $this->response->setOutput($this->load->view('module/helloworld.tpl', $data));
+        $this->response->setOutput($this->load->view('module/koraki.tpl', $data));
 
+    }
+
+    public function install() {
+        $this->load->model('extension/event');
+        // Register events
+        $this->model_extension_event->addEvent('koraki.publish.order.create', 'catalog/controller/checkout/confirm/after', 'module/koraki/order');
+    }
+
+    public function uninstall() {
+        $this->load->model('extension/event');
+
+        $this->model_extension_event->deleteEvent('koraki.publish.order.create');
     }
 
     /* Function that validates the data when Save Button is pressed */
     protected function validate() {
  
         // Block to check the user permission to manipulate the module
-        if (!$this->user->hasPermission('modify', 'module/helloworld')) {
+        if (!$this->user->hasPermission('modify', 'module/koraki')) {
             $this->error['warning'] = $this->language->get('error_permission');
         }
- 
-        // Block to check if the helloworld_text_field is properly set to save into database,
-        // otherwise the error is returned
-        if (!$this->request->post['helloworld_text_field']) {
-            $this->error['code'] = $this->language->get('error_code');
+
+        if (!$this->request->post['koraki_client_id']) {
+            $this->error['client_id'] = $this->language->get('error_client_id');
         }
-        /* End Block*/
+
+        if (!$this->request->post['koraki_client_secret']) {
+            $this->error['client_secret'] = $this->language->get('error_client_secret');
+        }
  
         // Block returns true if no error is found, else false if any error detected
         if (!$this->error) {
