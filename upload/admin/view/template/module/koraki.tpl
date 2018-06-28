@@ -24,6 +24,7 @@
         <h3 class="panel-title"><i class="fa fa-pencil"></i> <?php echo $text_edit; ?></h3>
       </div>
       <div class="panel-body">
+          <iframe src="https://koraki.io/opencart-intro-page/" style="border: 0;" height="200px" width="100%"></iframe>
         <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form-koraki" class="form-horizontal">
           <div class="form-group">
             <label class="col-sm-2 control-label" for="koraki_client_id"><?php echo $entry_client_id; ?></label>
