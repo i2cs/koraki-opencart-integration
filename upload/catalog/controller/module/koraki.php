@@ -3,12 +3,19 @@ class ControllerModuleKoraki extends Controller {
     /**
      * @var string Api endpoint
      */
-    private static $api_endpoint = "http://localhost:5000/api/v1.0/Notifications";
+    private $api_endpoint = "https://api.koraki.io/api/v1.0/Notifications";
+
+    public function widget(&$route, &$data) {
+        $appId = $this->config->get("koraki_client_id");
+        $status = $this->config->get("koraki_status");
+        if(!empty($appId) && $status) {
+            $data["modules"][] = "<script>window.sparkleSettings = { app_id: \"$appId\" }; !function(){function t(){var t=a.createElement(\"script\"); t.type=\"text/javascript\", t.async=!0,t.src=\"//api.koraki.io//widget/v1.0/js\"; var e=a.getElementsByTagName(\"script\")[0];e.parentNode.insertBefore(t,e)} var e=window,a=document;e.attachEvent?e.attachEvent(\"onload\",t):e.addEventListener(\"load\",t,!1)}();</script>";
+        }
+    }
 
     public function order() {
-        if(!$this->session->data['order_id'])
-            return;
-
+        //if(!$this->session->data['order_id'])
+        //    return;
         if (isset($this->request->server['HTTPS']) && (($this->request->server['HTTPS'] == 'on') || ($this->request->server['HTTPS'] == '1'))) {
             $base = $this->config->get('config_ssl');
         } else {
@@ -77,6 +84,7 @@ class ControllerModuleKoraki extends Controller {
 
         $client_id = $this->config->get('koraki_client_id');
         $client_secret = $this->config->get('koraki_client_secret');
+
         if(empty($client_id) || empty($client_secret)){
             return;
         }
@@ -85,13 +93,12 @@ class ControllerModuleKoraki extends Controller {
 
         $bodyString = json_encode($body);
         $curl = curl_init();
-
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->api_endpoint,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
+            CURLOPT_ENCODING => "UTF-8",
             CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 1,
+            CURLOPT_TIMEOUT => 3,
             CURLOPT_NOSIGNAL => 1,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",

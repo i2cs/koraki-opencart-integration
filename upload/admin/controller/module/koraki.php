@@ -114,13 +114,17 @@ class ControllerModuleKoraki extends Controller {
 
     public function install() {
         $this->load->model('extension/event');
-        // Register events
+        // Register event for injecting Koraki widget
+        $this->model_extension_event->addEvent('koraki.widget.push','catalog/view/common/content_bottom/before','module/koraki/widget');
+
+        // Register events for notification generation
         $this->model_extension_event->addEvent('koraki.publish.order.create', 'catalog/controller/checkout/confirm/after', 'module/koraki/order');
     }
 
     public function uninstall() {
         $this->load->model('extension/event');
 
+        $this->model_extension_event->deleteEvent('koraki.widget.push');
         $this->model_extension_event->deleteEvent('koraki.publish.order.create');
     }
 
