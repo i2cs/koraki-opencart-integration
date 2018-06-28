@@ -6,6 +6,15 @@ Koraki.io is a social influencing widget which can easily integrate into any web
 
 Not registered at Koraki? Create one here : https://app.koraki.io
 
+## OpenCart Module Features
+
+This OpenCart module can integrate your Koraki widget without any coding. 
+
+1. Embed chat widget
+2. Generates notification when customers complete a checkout
+3. Show live visitor anlytics notifications (not available on free plan)
+4. Show historical visitor analytics notifications (not available on free plan)
+
 ## Installation
 
 This section describes how to install the plugin and get it working.
