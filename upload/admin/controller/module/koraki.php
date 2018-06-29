@@ -1,7 +1,18 @@
 <?php
 class ControllerModuleKoraki extends Controller {
-    private $error = array(); // This is used to set the errors, if any.
- 
+    /**
+     * @var array
+     */
+    private $error = array();
+
+    /**
+     * @var Koraki
+     */
+    private $koraki;
+
+    /**
+     * Index function for admin UI loader
+     */
     public function index() {
         // Loading the language file of koraki
         $this->load->language('module/koraki');
@@ -112,6 +123,18 @@ class ControllerModuleKoraki extends Controller {
 
     }
 
+
+    /**
+     * Initializes koraki class
+     */
+    private function init()
+    {
+        $this->koraki = new Koraki($this);
+    }
+
+    /**
+     * On module installation
+     */
     public function install() {
         $this->load->model('extension/event');
         // Register event for injecting Koraki widget
@@ -119,16 +142,31 @@ class ControllerModuleKoraki extends Controller {
 
         // Register events for notification generation
         $this->model_extension_event->addEvent('koraki.publish.order.create', 'catalog/controller/checkout/confirm/after', 'module/koraki/order');
+        $this->model_extension_event->addEvent('koraki.publish.review.create', 'admin/model/catalog/review/editReview/before', 'module/koraki/review');
     }
 
+    /**
+     * On module uninstall
+     */
     public function uninstall() {
         $this->load->model('extension/event');
 
         $this->model_extension_event->deleteEvent('koraki.widget.push');
         $this->model_extension_event->deleteEvent('koraki.publish.order.create');
+        $this->model_extension_event->deleteEvent('koraki.publish.review.create');
     }
 
-    /* Function that validates the data when Save Button is pressed */
+    /**
+     * Review posted notification
+     * @param $route
+     * @param $review_id
+     * @param $review
+     */
+    public function review(&$route, &$review_id, &$review) {
+        $this->init();
+        $this->koraki->review($route, $review_id, $review);
+    }
+
     protected function validate() {
  
         // Block to check the user permission to manipulate the module
