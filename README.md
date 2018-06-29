@@ -1,4 +1,4 @@
-# Koraki Opencart Integration for OpenCart 2.2.0
+# Koraki Integration for OpenCart 2.2.0
 
 ## Description
 
