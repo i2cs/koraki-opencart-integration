@@ -143,7 +143,7 @@ class ControllerModuleKoraki extends Controller {
         // Register events for notification generation
         $this->model_extension_event->addEvent('koraki.publish.order.create', 'catalog/controller/checkout/confirm/after', 'module/koraki/order');
         $this->model_extension_event->addEvent('koraki.publish.review.create', 'admin/model/catalog/review/editReview/after', 'module/koraki/review');
-        $this->model_extension_event->addEvent('koraki.publish.cutomer.create', 'catalog/model/account/customer/addCustomer/after', 'module/koraki/cutomer');
+        $this->model_extension_event->addEvent('koraki.publish.customer.create', 'catalog/model/account/customer/addCustomer/after', 'module/koraki/cutomer');
     }
 
     /**
@@ -155,7 +155,7 @@ class ControllerModuleKoraki extends Controller {
         $this->model_extension_event->deleteEvent('koraki.widget.push');
         $this->model_extension_event->deleteEvent('koraki.publish.order.create');
         $this->model_extension_event->deleteEvent('koraki.publish.review.create');
-        $this->model_extension_event->deleteEvent('koraki.publish.cutomer.create');
+        $this->model_extension_event->deleteEvent('koraki.publish.customer.create');
     }
 
     /**
