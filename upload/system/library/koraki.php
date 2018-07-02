@@ -160,6 +160,49 @@ class Koraki {
         }
     }
 
+    public function customer($customer_id, &$data){
+        if(empty($customer_id)){
+            return;
+        }
+
+        $this->that->load->model('account/customer');
+
+        $customer = $this->that->model_account_customer->getCustomer($customer_id);
+
+        $this->that->load->model('localisation/country');
+
+        $country_info = $this->that->model_localisation_country->getCountry($data[0]['country_id']);
+
+        if(!(int)$customer['newsletter']){
+            return;
+        }
+
+        $variables = array(
+            "fname" => $customer['firstname'],
+            "lname" => $customer['lastname'],
+            "city" => $data[0]['city'],
+            "country" => $country_info['name'],
+            "country_code" => $country_info['iso_code_2']
+        );
+
+        $location_array = array();
+        array_push($location_array, $data[0]['city']);
+        array_push($location_array, $country_info['name']);
+        $location = $data[0]['city'] ? join(", ", $location_array) : $country_info['name'];
+        $location_verb = (empty($data[0]['country_id']) && empty($data[0]['city'])) ? "" : " from " . $location;
+
+
+        if(isset($customer) && $customer['newsletter']) {
+            $post = array(
+                "variables" => json_encode($variables),
+                "notificationText" => $customer['firstname'] . $location_verb . " subscribed for newsletters",
+                "location" => $location
+            );
+
+            $this->post($post);
+        }
+    }
+
     private function post($body) {
         if(empty($this->client_id) || empty($this->client_secret)){
             return;
