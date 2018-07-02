@@ -112,16 +112,21 @@ class Koraki {
 
     /**
      * Publish review add event
-     * @param $route
-     * @param $review_id
-     * @param $review
      */
-    public function review(&$route, &$review_id, &$review) {
+    public function review($review_id) {
         if (isset($this->that->request->server['HTTPS']) && (($this->that->request->server['HTTPS'] == 'on') || ($this->that->request->server['HTTPS'] == '1'))) {
             $base = $this->that->config->get('config_ssl');
         } else {
             $base = $this->that->config->get('config_url');
         }
+
+        if(empty($review_id)){
+            return;
+        }
+
+        $this->that->load->model('catalog/review');
+
+        $review = $this->that->model_catalog_review->getReview($review_id);
 
         if(isset($review) && !empty($review['rating']) && !empty($review['rating'] >= 3) && $review['status']==1){
 

@@ -142,7 +142,7 @@ class ControllerModuleKoraki extends Controller {
 
         // Register events for notification generation
         $this->model_extension_event->addEvent('koraki.publish.order.create', 'catalog/controller/checkout/confirm/after', 'module/koraki/order');
-        $this->model_extension_event->addEvent('koraki.publish.review.create', 'admin/model/catalog/review/editReview/before', 'module/koraki/review');
+        $this->model_extension_event->addEvent('koraki.publish.review.create', 'admin/model/catalog/review/editReview/after', 'module/koraki/review');
     }
 
     /**
@@ -162,9 +162,9 @@ class ControllerModuleKoraki extends Controller {
      * @param $review_id
      * @param $review
      */
-    public function review(&$route, &$review_id, &$review) {
+    public function review(&$route, &$review_id) {
         $this->init();
-        $this->koraki->review($route, $review_id, $review);
+        $this->koraki->review($review_id);
     }
 
     protected function validate() {
