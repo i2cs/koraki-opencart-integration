@@ -1,4 +1,4 @@
-# Koraki Integration for OpenCart 2.2.0
+# Koraki Integration for OpenCart 2.3.0
 
 ## Description
 
@@ -14,8 +14,10 @@ This OpenCart module can integrate your Koraki widget without any coding.
 
 1. Embed chat widget
 2. Generates notification when customers complete a checkout
-3. Show live visitor anlytics notifications
-4. Show historical visitor analytics notifications (not available on free plan)
+3. Generates notification when customer registers
+4. Generates notification when customer makes a review
+5. Show live visitor analytics notifications
+6. Show historical visitor analytics notifications (not available on free plan)
 
 ![alt text](https://github.com/i2cs/koraki-static/blob/master/koraki-widget.webp?raw=true)
 
@@ -23,7 +25,7 @@ This OpenCart module can integrate your Koraki widget without any coding.
 
 This section describes how to install the plugin and get it working.
 
-1. Download or checkout OpenCart-2.2.0 branch
+1. Download or checkout OpenCart-2.3.0 branch
 2. Copy all the files to `upload` directory of your OpenCart
 3. Install extension from `Extensions` > `Modules` menu
 4. Go to `Extension` -> `Modules` -> `Koraki Notification Widget` -> and copy/paste client id and client secret obtained from https://app.koraki.io
