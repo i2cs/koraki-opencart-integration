@@ -81,6 +81,7 @@ class Koraki {
                 $item = array(
                     "product_id" => $product['product_id'],
                     "product_name" => $product['name'],
+                    "url" => $base . "?route=product/product&product_id=" . $product['product_id'],
                     "thumbnail" => $popup
                 );
                 $items[] = $item;
@@ -89,20 +90,19 @@ class Koraki {
             $variables = array(
                 "fname" => $first_name,
                 "lname" => $last_name,
-                "address1" => $address1,
-                "address2" => $address2,
                 "city" => $city,
-                "zip" => $zip,
                 "country" => $country,
                 "country_code" => html_entity_decode($order_info['payment_iso_code_2'], ENT_QUOTES, 'UTF-8'),
                 "items" => $items
             );
 
-            $location = $city ? $city . ", " . $country : $country;
+            $location_array = array($city, $country);
+            $location = $city ? join(", ", $location_array) : $country;
+            $location_verb = (empty($country) && empty($city)) ? "" : " from " . $location;
 
             $post = array(
                 "variables" => json_encode($variables),
-                "notificationText" => $first_name . " from " . $location . " purchased " . $product_name_html,
+                "notificationText" => $first_name . $location_verb . " purchased " . $product_name_html,
                 "location" => $address2 . ", " . $city . ", " . $city . ", " . $country
             );
 
@@ -111,17 +111,22 @@ class Koraki {
     }
 
     /**
-     * Publish review add event
-     * @param $route
-     * @param $review_id
-     * @param $review
+     * Review add event
      */
-    public function review(&$route, &$review_id, &$review) {
+    public function review($review_id) {
         if (isset($this->that->request->server['HTTPS']) && (($this->that->request->server['HTTPS'] == 'on') || ($this->that->request->server['HTTPS'] == '1'))) {
             $base = $this->that->config->get('config_ssl');
         } else {
             $base = $this->that->config->get('config_url');
         }
+
+        if(empty($review_id)){
+           return;
+        }
+
+        $this->that->load->model('catalog/review');
+
+        $review = $this->that->model_catalog_review->getReview($review_id);
 
         if(isset($review) && !empty($review['rating']) && !empty($review['rating'] >= 3) && $review['status']==1){
 
@@ -149,6 +154,49 @@ class Koraki {
                 "variables" => json_encode($variables),
                 "notificationText" => $review['author'] . " made a ". $review['rating'] ."/5 star rating on " . $product,
                 "location" => ""
+            );
+
+            $this->post($post);
+        }
+    }
+
+    public function customer($customer_id, &$data){
+        if(empty($customer_id)){
+            return;
+        }
+
+        $this->that->load->model('account/customer');
+
+        $customer = $this->that->model_account_customer->getCustomer($customer_id);
+
+        $this->that->load->model('localisation/country');
+
+        $country_info = $this->that->model_localisation_country->getCountry($data[0]['country_id']);
+
+        if(!(int)$customer['newsletter']){
+            return;
+        }
+
+        $variables = array(
+            "fname" => $customer['firstname'],
+            "lname" => $customer['lastname'],
+            "city" => $data[0]['city'],
+            "country" => $country_info['name'],
+            "country_code" => $country_info['iso_code_2']
+        );
+
+        $location_array = array();
+        array_push($location_array, $data[0]['city']);
+        array_push($location_array, $country_info['name']);
+        $location = $data[0]['city'] ? join(", ", $location_array) : $country_info['name'];
+        $location_verb = (empty($data[0]['country_id']) && empty($data[0]['city'])) ? "" : " from " . $location;
+
+
+        if(isset($customer) && $customer['newsletter']) {
+            $post = array(
+                "variables" => json_encode($variables),
+                "notificationText" => $customer['firstname'] . $location_verb . " subscribed for newsletters",
+                "location" => $location
             );
 
             $this->post($post);

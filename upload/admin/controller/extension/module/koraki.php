@@ -1,5 +1,7 @@
 <?php
-class ControllerModuleKoraki extends Controller {
+require_once(DIR_SYSTEM . "library/koraki.php");
+
+class ControllErextensionModuleKoraki extends Controller {
     /**
      * @var array
      */
@@ -15,7 +17,7 @@ class ControllerModuleKoraki extends Controller {
      */
     public function index() {
         // Loading the language file of koraki
-        $this->load->language('module/koraki');
+        $this->load->language('extension/module/koraki');
      
         // Set the title of the page to the heading title in the Language file i.e., Hello World
         $this->document->setTitle($this->language->get('heading_title'));
@@ -32,7 +34,7 @@ class ControllerModuleKoraki extends Controller {
             $this->session->data['success'] = $this->language->get('text_success');
 
             // Redirect to the Module Listing
-            $this->response->redirect($this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL'));
+            $this->response->redirect($this->url->link('extension/extension', 'token=' . $this->session->data['token'] . '&type=module', 'SSL'));
         }
      
         // Assign the language data for parsing it to view
@@ -83,18 +85,18 @@ class ControllerModuleKoraki extends Controller {
         );
         $data['breadcrumbs'][] = array(
             'text'      => $this->language->get('text_module'),
-            'href'      => $this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL'),
+            'href'      => $this->url->link('extension/extension', 'token=' . $this->session->data['token'] . '&type=module', 'SSL'),
             'separator' => ' :: '
         );
         $data['breadcrumbs'][] = array(
             'text'      => $this->language->get('heading_title'),
-            'href'      => $this->url->link('module/koraki', 'token=' . $this->session->data['token'], 'SSL'),
+            'href'      => $this->url->link('extension/module/koraki', 'token=' . $this->session->data['token'], 'SSL'),
             'separator' => ' :: '
         );
           
-        $data['action'] = $this->url->link('module/koraki', 'token=' . $this->session->data['token'], 'SSL'); // URL to be directed when the save button is pressed
+        $data['action'] = $this->url->link('extension/module/koraki', 'token=' . $this->session->data['token'], 'SSL'); // URL to be directed when the save button is pressed
      
-        $data['cancel'] = $this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL'); // URL to be redirected when cancel button is pressed
+        $data['cancel'] = $this->url->link('extension/extension', 'token=' . $this->session->data['token'] . '&type=module', 'SSL'); // URL to be redirected when cancel button is pressed
 
         if (isset($this->request->post['koraki_client_id'])) {
             $data['koraki_client_id'] = $this->request->post['koraki_client_id'];
@@ -119,7 +121,7 @@ class ControllerModuleKoraki extends Controller {
         $data['column_left'] = $this->load->controller('common/column_left');
         $data['footer'] = $this->load->controller('common/footer');
 
-        $this->response->setOutput($this->load->view('module/koraki.tpl', $data));
+        $this->response->setOutput($this->load->view('extension/module/koraki.tpl', $data));
 
     }
 
@@ -138,11 +140,12 @@ class ControllerModuleKoraki extends Controller {
     public function install() {
         $this->load->model('extension/event');
         // Register event for injecting Koraki widget
-        $this->model_extension_event->addEvent('koraki.widget.push','catalog/view/common/content_bottom/before','module/koraki/widget');
+        $this->model_extension_event->addEvent('koraki.widget.push','catalog/view/common/content_bottom/before','extension/module/koraki/widget');
 
         // Register events for notification generation
-        $this->model_extension_event->addEvent('koraki.publish.order.create', 'catalog/controller/checkout/confirm/after', 'module/koraki/order');
-        $this->model_extension_event->addEvent('koraki.publish.review.create', 'admin/model/catalog/review/editReview/before', 'module/koraki/review');
+        $this->model_extension_event->addEvent('koraki.publish.order.create', 'catalog/controller/checkout/confirm/after', 'extension/module/koraki/order');
+        $this->model_extension_event->addEvent('koraki.publish.review.create', 'admin/model/catalog/review/editReview/after', 'extension/module/koraki/review');
+        $this->model_extension_event->addEvent('koraki.publish.customer.create', 'catalog/model/account/customer/addCustomer/after', 'extension/module/koraki/customer');
     }
 
     /**
@@ -154,6 +157,7 @@ class ControllerModuleKoraki extends Controller {
         $this->model_extension_event->deleteEvent('koraki.widget.push');
         $this->model_extension_event->deleteEvent('koraki.publish.order.create');
         $this->model_extension_event->deleteEvent('koraki.publish.review.create');
+        $this->model_extension_event->deleteEvent('koraki.publish.customer.create');
     }
 
     /**
@@ -162,15 +166,15 @@ class ControllerModuleKoraki extends Controller {
      * @param $review_id
      * @param $review
      */
-    public function review(&$route, &$review_id, &$review) {
+    public function review(&$route, &$data) {
         $this->init();
-        $this->koraki->review($route, $review_id, $review);
+        $this->koraki->review($data[0]);
     }
 
     protected function validate() {
  
         // Block to check the user permission to manipulate the module
-        if (!$this->user->hasPermission('modify', 'module/koraki')) {
+        if (!$this->user->hasPermission('modify', 'extension/module/koraki')) {
             $this->error['warning'] = $this->language->get('error_permission');
         }
 

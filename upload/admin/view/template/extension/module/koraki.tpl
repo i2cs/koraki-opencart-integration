@@ -30,7 +30,7 @@
             <label class="col-sm-2 control-label" for="koraki_client_id"><?php echo $entry_client_id; ?></label>
             <div class="col-sm-10">
               <input class="form-control" type="text" name="koraki_client_id" id="koraki_client_id" value="<?php echo $koraki_client_id; ?>" placeholder="<?php echo $entry_client_id_placeholder; ?>" />
-              <?php if ($error_client_id) { ?>
+              <?php if (isset($error_client_id)) { ?>
               <div class="text-danger"><?php echo $error_client_id; ?></div>
               <?php } ?>
             </div>
@@ -39,7 +39,7 @@
             <label class="col-sm-2 control-label" for="koraki_client_secret"><?php echo $entry_client_secret; ?></label>
             <div class="col-sm-10">
               <input class="form-control" type="text" name="koraki_client_secret" id="koraki_client_secret" value="<?php echo $koraki_client_secret; ?>" placeholder="<?php echo $entry_client_secret_placeholder; ?>" />
-              <?php if ($error_client_secret) { ?>
+              <?php if (isset($error_client_secret)) { ?>
               <div class="text-danger"><?php echo $error_client_secret; ?></div>
               <?php } ?>
             </div>
