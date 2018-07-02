@@ -15,8 +15,9 @@ This OpenCart module can integrate your Koraki widget without any coding.
 1. Embed chat widget
 2. Generates notification when customers complete a checkout
 3. Generates notification when customer makes a review
-4. Show live visitor anlytics notifications
-5. Show historical visitor analytics notifications (not available on free plan)
+4. Generates notification when customer registers
+5. Show live visitor anlytics notifications
+6. Show historical visitor analytics notifications (not available on free plan)
 
 ![alt text](https://github.com/i2cs/koraki-static/blob/master/koraki-widget.webp?raw=true)
 
