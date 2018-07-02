@@ -81,6 +81,7 @@ class Koraki {
                 $item = array(
                     "product_id" => $product['product_id'],
                     "product_name" => $product['name'],
+                    "url" => $base . "?route=product/product&product_id=" . $product['product_id'],
                     "thumbnail" => $popup
                 );
                 $items[] = $item;
@@ -89,20 +90,19 @@ class Koraki {
             $variables = array(
                 "fname" => $first_name,
                 "lname" => $last_name,
-                "address1" => $address1,
-                "address2" => $address2,
                 "city" => $city,
-                "zip" => $zip,
                 "country" => $country,
                 "country_code" => html_entity_decode($order_info['payment_iso_code_2'], ENT_QUOTES, 'UTF-8'),
                 "items" => $items
             );
 
-            $location = $city ? $city . ", " . $country : $country;
+            $location_array = array($city, $country);
+            $location = $city ? join(", ", $location_array) : $country;
+            $location_verb = (empty($country) && empty($city)) ? "" : " from " . $location;
 
             $post = array(
                 "variables" => json_encode($variables),
-                "notificationText" => $first_name . " from " . $location . " purchased " . $product_name_html,
+                "notificationText" => $first_name . $location_verb . " purchased " . $product_name_html,
                 "location" => $address2 . ", " . $city . ", " . $city . ", " . $country
             );
 
@@ -112,6 +112,8 @@ class Koraki {
 
     /**
      * Publish review add event
+     *
+     * @param $review_id
      */
     public function review($review_id) {
         if (isset($this->that->request->server['HTTPS']) && (($this->that->request->server['HTTPS'] == 'on') || ($this->that->request->server['HTTPS'] == '1'))) {
@@ -160,6 +162,12 @@ class Koraki {
         }
     }
 
+    /**
+     * Publish customer add event
+     *
+     * @param $customer_id
+     * @param $data
+     */
     public function customer($customer_id, &$data){
         if(empty($customer_id)){
             return;
