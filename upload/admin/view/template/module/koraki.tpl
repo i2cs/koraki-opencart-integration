@@ -24,8 +24,13 @@
         <h3 class="panel-title"><i class="fa fa-pencil"></i> <?php echo $text_edit; ?></h3>
       </div>
       <div class="panel-body">
-          <iframe src="https://koraki.io/opencart-intro-page/" style="border: 0;" height="200px" width="100%"></iframe>
+          <iframe src="https://koraki.io/opencart-intro-page/?version=1.0" style="border: 0;" height="200px" width="100%"></iframe>
         <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form-koraki" class="form-horizontal">
+
+          <div class="col-sm-offset-2 topm">
+            <h3><?php echo $entry_credentials; ?></h3>
+            <p><?php echo $entry_credentials_help; ?></p>
+          </div>
           <div class="form-group">
             <label class="col-sm-2 control-label" for="koraki_client_id"><?php echo $entry_client_id; ?></label>
             <div class="col-sm-10">
@@ -43,6 +48,75 @@
               <div class="text-danger"><?php echo $error_client_secret; ?></div>
               <?php } ?>
             </div>
+          </div>
+
+
+
+          <div class="col-sm-offset-2 topm">
+            <h3><?php echo $entry_events; ?></h3>
+            <p><?php echo $entry_events_help; ?></p>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-status"><?php echo $entry_checkout; ?></label>
+            <div class="col-sm-10">
+              <select name="koraki_checkout" id="input-status" class="form-control">
+                <?php if ($koraki_checkout) { ?>
+                <option value="1" selected="selected"><?php echo $text_enabled; ?></option>
+                <option value="0"><?php echo $text_disabled; ?></option>
+                <?php } else { ?>
+                <option value="1"><?php echo $text_enabled; ?></option>
+                <option value="0" selected="selected"><?php echo $text_disabled; ?></option>
+                <?php } ?>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-status"><?php echo $entry_registered; ?></label>
+            <div class="col-sm-10">
+              <select name="koraki_registered" id="input-status" class="form-control">
+                <?php if ($koraki_registered) { ?>
+                <option value="1" selected="selected"><?php echo $text_enabled; ?></option>
+                <option value="0"><?php echo $text_disabled; ?></option>
+                <?php } else { ?>
+                <option value="1"><?php echo $text_enabled; ?></option>
+                <option value="0" selected="selected"><?php echo $text_disabled; ?></option>
+                <?php } ?>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-status"><?php echo $entry_newsletters; ?></label>
+            <div class="col-sm-10">
+              <select name="koraki_newsletters" id="input-status" class="form-control">
+                <?php if ($koraki_newsletters) { ?>
+                <option value="1" selected="selected"><?php echo $text_enabled; ?></option>
+                <option value="0"><?php echo $text_disabled; ?></option>
+                <?php } else { ?>
+                <option value="1"><?php echo $text_enabled; ?></option>
+                <option value="0" selected="selected"><?php echo $text_disabled; ?></option>
+                <?php } ?>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-status"><?php echo $entry_review; ?></label>
+            <div class="col-sm-10">
+              <select name="koraki_review" id="input-status" class="form-control">
+                <?php if ($koraki_review) { ?>
+                <option value="1" selected="selected"><?php echo $text_enabled; ?></option>
+                <option value="0"><?php echo $text_disabled; ?></option>
+                <?php } else { ?>
+                <option value="1"><?php echo $text_enabled; ?></option>
+                <option value="0" selected="selected"><?php echo $text_disabled; ?></option>
+                <?php } ?>
+              </select>
+            </div>
+          </div>
+
+
+          <div class="col-sm-offset-2 topm">
+            <h3><?php echo $entry_widget; ?></h3>
+            <p><?php echo $entry_widget_help; ?></p>
           </div>
           <div class="form-group">
             <label class="col-sm-2 control-label" for="input-status"><?php echo $entry_status; ?></label>
@@ -64,4 +138,9 @@
   </div>
 </div>
 
+<style>
+  .topm{
+    margin-top:30px;
+  }
+</style>
 <?php echo $footer; ?>

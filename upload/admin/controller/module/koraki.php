@@ -46,6 +46,9 @@ class ControllerModuleKoraki extends Controller {
         $data['text_column_left'] = $this->language->get('text_column_left');
         $data['text_column_right'] = $this->language->get('text_column_right');
 
+        $data['entry_events'] = $this->language->get('entry_events');
+        $data['entry_credentials'] = $this->language->get('entry_credentials');
+        $data['entry_widget'] = $this->language->get('entry_widget');
         $data['entry_client_id'] = $this->language->get('entry_client_id');
         $data['entry_client_secret'] = $this->language->get('entry_client_secret');
         $data['entry_client_id_placeholder'] = $this->language->get('entry_client_id_placeholder');
@@ -53,8 +56,14 @@ class ControllerModuleKoraki extends Controller {
         $data['entry_layout'] = $this->language->get('entry_layout');
         $data['entry_position'] = $this->language->get('entry_position');
         $data['entry_status'] = $this->language->get('entry_status');
-        $data['entry_sort_order'] = $this->language->get('entry_sort_order');
-     
+        $data['entry_checkout'] = $this->language->get('entry_checkout');
+        $data['entry_registered'] = $this->language->get('entry_registered');
+        $data['entry_newsletters'] = $this->language->get('entry_newsletters');
+        $data['entry_review'] = $this->language->get('entry_review');
+        $data['entry_credentials_help'] = $this->language->get('entry_credentials_help');
+        $data['entry_events_help'] = $this->language->get('entry_events_help');
+        $data['entry_widget_help'] = $this->language->get('entry_widget_help');
+
         $data['button_save'] = $this->language->get('button_save');
         $data['button_cancel'] = $this->language->get('button_cancel');
         $data['button_add_module'] = $this->language->get('button_add_module');
@@ -114,6 +123,30 @@ class ControllerModuleKoraki extends Controller {
         } else {
             $data['koraki_status'] = $this->config->get('koraki_status');
         }
+
+        if (isset($this->request->post['koraki_checkout'])) {
+            $data['koraki_checkout'] = $this->request->post['koraki_checkout'];
+        } else {
+            $data['koraki_checkout'] = $this->config->get('koraki_checkout');
+        }
+
+        if (isset($this->request->post['koraki_registered'])) {
+            $data['koraki_registered'] = $this->request->post['koraki_registered'];
+        } else {
+            $data['koraki_registered'] = $this->config->get('koraki_registered');
+        }
+
+        if (isset($this->request->post['koraki_newsletters'])) {
+            $data['koraki_newsletters'] = $this->request->post['koraki_newsletters'];
+        } else {
+            $data['koraki_newsletters'] = $this->config->get('koraki_newsletters');
+        }
+
+        if (isset($this->request->post['koraki_review'])) {
+            $data['koraki_review'] = $this->request->post['koraki_review'];
+        } else {
+            $data['koraki_review'] = $this->config->get('koraki_review');
+        }
         
         $data['header'] = $this->load->controller('common/header');
         $data['column_left'] = $this->load->controller('common/column_left');
@@ -136,6 +169,7 @@ class ControllerModuleKoraki extends Controller {
      * On module installation
      */
     public function install() {
+        $this->load->model('setting/setting');
         $this->load->model('extension/event');
         // Register event for injecting Koraki widget
         $this->model_extension_event->addEvent('koraki.widget.push','catalog/view/common/content_bottom/before','module/koraki/widget');
@@ -143,7 +177,17 @@ class ControllerModuleKoraki extends Controller {
         // Register events for notification generation
         $this->model_extension_event->addEvent('koraki.publish.order.create', 'catalog/controller/checkout/confirm/after', 'module/koraki/order');
         $this->model_extension_event->addEvent('koraki.publish.review.create', 'admin/model/catalog/review/editReview/after', 'module/koraki/review');
-        $this->model_extension_event->addEvent('koraki.publish.customer.create', 'catalog/model/account/customer/addCustomer/after', 'module/koraki/cutomer');
+        $this->model_extension_event->addEvent('koraki.publish.newsletter.create', 'catalog/model/account/customer/addCustomer/after', 'module/koraki/newsletter');
+        $this->model_extension_event->addEvent('koraki.publish.customer.create', 'catalog/model/account/customer/addCustomer/after', 'module/koraki/customer');
+
+        $arr = array(
+            "koraki_checkout" => 1,
+            "koraki_registered" => 1,
+            "koraki_newsletters" => 1,
+            "koraki_review" => 1,
+            "koraki_status" => 1
+        );
+        $this->model_setting_setting->editSetting('koraki', $arr);
     }
 
     /**
@@ -155,6 +199,7 @@ class ControllerModuleKoraki extends Controller {
         $this->model_extension_event->deleteEvent('koraki.widget.push');
         $this->model_extension_event->deleteEvent('koraki.publish.order.create');
         $this->model_extension_event->deleteEvent('koraki.publish.review.create');
+        $this->model_extension_event->deleteEvent('koraki.publish.newsletter.create');
         $this->model_extension_event->deleteEvent('koraki.publish.customer.create');
     }
 

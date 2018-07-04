@@ -4,9 +4,9 @@
 
 Koraki.io is a social influencing widget which can easily integrate into any website. It can show various realtime notifications to visitors and influence them to convert.
 
-Not registered at Koraki? Create one here : https://app.koraki.io
+Not registered at Koraki? Create one for free : https://app.koraki.io
 
-![alt Koraki widget](https://raw.githubusercontent.com/i2cs/koraki-static/master/koraki-widget.png)
+![Koraki widget](https://raw.githubusercontent.com/i2cs/koraki-static/master/koraki-widget.png)
 
 ## OpenCart Module Features
 
@@ -16,10 +16,11 @@ This OpenCart module can integrate your Koraki widget without any coding.
 2. Generates notification when customers complete a checkout
 3. Generates notification when customer makes a review
 4. Generates notification when customer registers
-5. Show live visitor anlytics notifications
-6. Show historical visitor analytics notifications (not available on free plan)
+5. Generates notification when customer subscribes for newsletters
+6. Show live visitor anlytics notifications
+7. Show historical visitor analytics notifications
 
-![alt text](https://github.com/i2cs/koraki-static/blob/master/koraki-widget.webp?raw=true)
+![Koraki widget](https://github.com/i2cs/koraki-static/blob/master/koraki-widget.webp?raw=true)
 
 ## Installation
 
