@@ -23,6 +23,11 @@ class ControllerExtensionModuleKoraki extends Controller {
 
     public function customer(&$route, &$data, &$customer_id) {
         $this->init();
-        $this->koraki->customer($customer_id, $data);
+        $this->koraki->customer($customer_id, $data[0]);
+    }
+
+    public function newsletter(&$route, &$data, &$customer_id) {
+        $this->init();
+        $this->koraki->newsletter($customer_id, $data[0]);
     }
 }
