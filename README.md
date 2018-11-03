@@ -1,4 +1,4 @@
-# Koraki Integration for OpenCart 2.3.0
+# Koraki Integration for OpenCart 3.x
 
 ## Description
 
@@ -26,7 +26,7 @@ This OpenCart module can integrate your Koraki widget without any coding.
 
 This section describes how to install the plugin and get it working.
 
-1. Download or checkout OpenCart-2.3.0 branch
+1. Download or checkout OpenCart-3.0.0 branch
 2. Copy all the files to `upload` directory of your OpenCart
 3. Install extension from `Extensions` > `Modules` menu
 4. Go to `Extension` -> `Modules` -> `Koraki Notification Widget` -> and copy/paste client id and client secret obtained from https://app.koraki.io
