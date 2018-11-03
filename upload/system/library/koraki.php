@@ -80,7 +80,7 @@ class Koraki {
             $items = array();
             foreach ($order_products as $product) {
                 $p = $this->that->model_catalog_product->getProduct($product['product_id']);
-                $popup = $this->that->model_tool_image->resize($p['image'], $this->that->config->get($this->that->config->get('config_theme') . '_image_thumb_width'), $this->that->config->get($this->that->config->get('config_theme') . '_image_thumb_height'));
+                $popup = $this->that->model_tool_image->resize($p['image'], 150, 150);
                 $item = array(
                     "product_id" => $product['product_id'],
                     "product_name" => $product['name'],
@@ -106,7 +106,8 @@ class Koraki {
             $post = array(
                 "variables" => json_encode($variables),
                 "notificationText" => $first_name . $location_verb . " purchased " . $product_name_html,
-                "location" => $address2 . ", " . $city . ", " . $city . ", " . $country
+                "location" => $address2 . ", " . $city . ", " . $city . ", " . $country,
+                "thumbnailUrl" => $items[0]['thumbnail'],
             );
 
             $this->post($post);
@@ -142,7 +143,7 @@ class Koraki {
             $this->that->load->model('tool/image');
 
             $p = $this->that->model_catalog_product->getProduct($review['product_id']);
-            $popup = $this->that->model_tool_image->resize($p['image'], $this->that->config->get($this->that->config->get('config_theme') . '_image_thumb_width'), $this->that->config->get($this->that->config->get('config_theme') . '_image_thumb_height'));
+            $popup = $this->that->model_tool_image->resize($p['image'], 150, 150);
 
             $item = array(
                 "product_id" => $p['product_id'],
@@ -161,6 +162,7 @@ class Koraki {
             $post = array(
                 "variables" => json_encode($variables),
                 "notificationText" => $review['author'] . " made a ". $review['rating'] ."/5 star rating on " . $product,
+                "thumbnailUrl" => $popup,
                 "location" => ""
             );
 
