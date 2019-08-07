@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification
+  xmlns="https://github.com/vqmod/vqmod"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="https://github.com/vqmod/vqmod https://raw.githubusercontent.com/vqmod/vqmod/master/vqmod.xsd">
+    <id>Koraki Social Proof</id>
+    <version>1.0.0</version>
+    <vqmver required="true">2.4.0</vqmver>
+    <author>MadushaK</author>
+    <file path="system/startup.php">
+        <operation>
+            <search><![CDATA[
+	?>
+            ]]></search>
+            <add position="before"><![CDATA[
+              require_once(DIR_SYSTEM . 'library/koraki.php');
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/checkout/success.php">
+        <operation>
+            <search><![CDATA[
+	public function index() {
+            ]]></search>
+            <add position="after"><![CDATA[
+              $koraki = new Koraki($this);
+	      $koraki->order();
+            ]]></add>
+        </operation>
+    </file>
+    <file path="catalog/controller/account/register.php">
+        <operation>
+            <search><![CDATA[
+unset($this->session->data['guest']);
+            ]]></search>
+            <add position="before"><![CDATA[
+              $koraki = new Koraki($this);
+	      $koraki->customer($this->session->data['customer_id'], $this->request->post);
+            ]]></add>
+        </operation>
+    </file>
+    <file path="catalog/view/theme/*/template/common/footer.tpl">
+        <operation>
+            <search><![CDATA[
+<div id="footer">
+            ]]></search>
+            <add position="before"><![CDATA[
+              <?php $koraki = new Koraki($this);
+	      $koraki->widget(); ?>
+            ]]></add>
+        </operation>
+    </file>
+</modification>

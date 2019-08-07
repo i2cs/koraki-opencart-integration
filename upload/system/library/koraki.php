@@ -26,11 +26,11 @@ class Koraki {
      * @param $route
      * @param $data
      */
-    public function widget(&$route, &$data) {
+    public function widget() {
         $appId = $this->that->config->get("koraki_client_id");
         $status = $this->that->config->get("koraki_status");
         if(!empty($appId) && $status) {
-            $data["modules"][] = "<script>window.sparkleSettings = { app_id: \"$appId\" }; !function(){function t(){var t=a.createElement(\"script\"); t.type=\"text/javascript\", t.async=!0,t.src=\"//api.koraki.io//widget/v1.0/js\"; var e=a.getElementsByTagName(\"script\")[0];e.parentNode.insertBefore(t,e)} var e=window,a=document;e.attachEvent?e.attachEvent(\"onload\",t):e.addEventListener(\"load\",t,!1)}();</script>";
+            echo "<script>window.sparkleSettings = { app_id: \"$appId\" }; !function(){function t(){var t=a.createElement(\"script\"); t.type=\"text/javascript\", t.async=!0,t.src=\"//api.koraki.io//widget/v1.0/js\"; var e=a.getElementsByTagName(\"script\")[0];e.parentNode.insertBefore(t,e)} var e=window,a=document;e.attachEvent?e.attachEvent(\"onload\",t):e.addEventListener(\"load\",t,!1)}();</script>";
         }
     }
 
@@ -259,7 +259,7 @@ class Koraki {
         $location_verb = (empty($data['country_id']) && empty($data[0]['city'])) ? "" : " from " . $location;
 
 
-        if(isset($customer) && $customer['newsletter']) {
+        if(isset($customer)) {
             $post = array(
                 "variables" => json_encode($variables),
                 "notificationText" => empty($customer['firstname'])?"Someone" : $customer['firstname'] . $location_verb . " registered as a user",
