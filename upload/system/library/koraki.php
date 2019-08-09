@@ -38,11 +38,11 @@ class Koraki {
     /**
      * Publish order add event
      */
-    public function order() {
+    public function order($order_id) {
         if(!$this->that->config->get('koraki_checkout'))
             return;
 
-        if(!$this->that->session->data['order_id'])
+        if(!$order_id)
             return;
 
         if (isset($this->that->request->server['HTTPS']) && (($this->that->request->server['HTTPS'] == 'on') || ($this->that->request->server['HTTPS'] == '1'))) {
@@ -56,7 +56,7 @@ class Koraki {
         $this->that->load->model('catalog/product');
         $this->that->load->model('tool/image');
 
-        $order_info = $this->that->model_checkout_order->getOrder($this->that->session->data['order_id']);
+        $order_info = $this->that->model_checkout_order->getOrder($order_id);
         if ($order_info) {
             $first_name = html_entity_decode($order_info['payment_firstname'], ENT_QUOTES, 'UTF-8');
             $last_name = html_entity_decode($order_info['payment_lastname'], ENT_QUOTES, 'UTF-8');
@@ -66,7 +66,7 @@ class Koraki {
             $zip = html_entity_decode($order_info['payment_postcode'], ENT_QUOTES, 'UTF-8');
             $country = $order_info['payment_country'];
 
-            $order_products = $this->that->model_account_order->getOrderProducts($this->that->session->data['order_id']);
+            $order_products = $this->that->model_account_order->getOrderProducts($order_id);
             $product_name_html = "something";
             $cart_count = count($order_products);
             if($cart_count > 0){

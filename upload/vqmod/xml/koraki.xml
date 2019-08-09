@@ -18,14 +18,14 @@
         </operation>
     </file>
 
-    <file path="catalog/controller/checkout/success.php">
+    <file path="catalog/model/checkout/order.php">
         <operation>
             <search><![CDATA[
-	public function index() {
+	public function confirm($order_id, $order_status_id, $comment = '', $notify = false) {
             ]]></search>
             <add position="after"><![CDATA[
               $koraki = new Koraki($this);
-	      $koraki->order();
+	      $koraki->order($order_id);
             ]]></add>
         </operation>
     </file>

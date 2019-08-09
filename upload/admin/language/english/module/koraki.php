@@ -4,7 +4,6 @@ $_['heading_title']       = 'Koraki Notification Widget';
  
 // Text
 $_['text_module']         = 'Modules';
-$_['text_edit']           = 'Edit Koraki Module';
 $_['text_success']        = 'Success: You have modified module Koraki!';
  
 // Entry
