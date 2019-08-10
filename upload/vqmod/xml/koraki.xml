@@ -9,10 +9,10 @@
     <author>MadushaK</author>
     <file path="system/startup.php">
         <operation>
-            <search><![CDATA[
+            <search position="before"><![CDATA[
 	?>
             ]]></search>
-            <add position="before"><![CDATA[
+            <add><![CDATA[
               require_once(DIR_SYSTEM . 'library/koraki.php');
             ]]></add>
         </operation>
@@ -20,10 +20,10 @@
 
     <file path="catalog/model/checkout/order.php">
         <operation>
-            <search><![CDATA[
+            <search position="after"><![CDATA[
 	public function confirm($order_id, $order_status_id, $comment = '', $notify = false) {
             ]]></search>
-            <add position="after"><![CDATA[
+            <add><![CDATA[
               $koraki = new Koraki($this);
 	      $koraki->order($order_id);
             ]]></add>
@@ -31,10 +31,10 @@
     </file>
     <file path="catalog/controller/account/register.php">
         <operation>
-            <search><![CDATA[
+            <search position="before"><![CDATA[
 unset($this->session->data['guest']);
             ]]></search>
-            <add position="before"><![CDATA[
+            <add><![CDATA[
               $koraki = new Koraki($this);
 	      $koraki->customer($this->session->data['customer_id'], $this->request->post);
             ]]></add>
@@ -42,10 +42,10 @@ unset($this->session->data['guest']);
     </file>
     <file path="catalog/view/theme/*/template/common/footer.tpl">
         <operation>
-            <search><![CDATA[
+            <search position="before"><![CDATA[
 <div id="footer">
             ]]></search>
-            <add position="before"><![CDATA[
+            <add><![CDATA[
               <?php $koraki = new Koraki($this);
 	      $koraki->widget(); ?>
             ]]></add>
